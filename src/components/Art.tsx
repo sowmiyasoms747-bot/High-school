@@ -12,7 +12,6 @@ export function ArtDefs() {
   return (
     <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
       <defs>
-        {g('g-page', '#ffffff', '#dfe3f3')}
         {g('b-blue', '#3f9bff', '#0a3fd0')}{g('b-green', '#34c45c', '#067a34')}{g('b-indigo', '#6f66ff', '#2412a8')}{g('b-teal', '#22c7c0', '#04757f')}{g('b-pink', '#ff4f97', '#a30d74')}
         <linearGradient id="b-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fffbc0" /><stop offset=".45" stopColor="#ffe02e" /><stop offset="1" stopColor="#ffa800" /></linearGradient>
         <filter id="b-drop" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="1.2" floodColor="#10063c" floodOpacity=".5" /></filter>
@@ -25,10 +24,10 @@ export function LogoMark({ size = 44 }: { size?: number }) {
   return <img className="logo-img" src={logo} width={size} height={Math.round(size * 0.873)} alt="" draggable={false} />;
 }
 
-export function Logo({ big }: { big?: boolean }) {
+export function Logo() {
   return (
-    <span className={`logo${big ? ' logo-big' : ''}`}>
-      <LogoMark size={big ? 72 : 48} /><span>Learning<br />Universe LMS</span>
+    <span className="logo">
+      <LogoMark size={48} /><span>Learning<br />Universe LMS</span>
     </span>
   );
 }
@@ -36,15 +35,6 @@ export function Logo({ big }: { big?: boolean }) {
 export const Flame = ({ size = 24 }: { size?: number }) => <Icon name="flame" size={size} />;
 export const StarArt = ({ size = 24 }: { size?: number }) => <Icon name="star" size={size} />;
 export const SubjectIcon = ({ id, size = 84 }: { id: SubjectId; size?: number }) => <Icon name={id} size={size} />;
-
-export function StackedBooks() {
-  return (
-    <svg viewBox="0 0 320 190" className="stacked-books" aria-hidden="true">
-      <path d="m0 112 150-34 168 22v10l-8 4v40l8 6v6L150 190 0 152z" fill="#3558d6" /><path d="M150 132 308 104v50l-158 30z" fill="url(#g-page)" /><path d="m0 110 150-34 170 22-170 32z" fill="#5b86f5" /><path d="M0 110v42l150 38v-58z" fill="#3f66e3" />
-      <path d="m40 50 90-26 152 26v8l-8 3v28l8 5v5l-140 26L40 98z" fill="#e0801c" /><path d="M142 72 274 50v42l-132 26z" fill="url(#g-page)" /><path d="m40 46 90-26 154 26-142 24z" fill="#ffae48" /><path d="M40 46c-8 8-8 44 0 54l102 24V70z" fill="#ee8e22" />
-    </svg>
-  );
-}
 
 export function Mesh() {
   return (

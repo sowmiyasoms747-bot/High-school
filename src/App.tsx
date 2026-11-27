@@ -7,25 +7,14 @@ import { HomePage } from './pages/Home';
 import { ChapterPage, MyLearningPage, SubjectPage } from './pages/Learning';
 import { PracticePage, RewardPage, TheoryPage, VideoPage } from './pages/Lesson';
 import { ClassroomPage, LivePage } from './pages/Live';
-import { LoginPage } from './pages/Login';
 import { ProfilePage, ProfileSectionPage } from './pages/Profile';
 import { ProgressPage } from './pages/Progress';
 import { QuizListPage, QuizPage } from './pages/Quiz';
-import { useSession } from './state';
 
 export default function App() {
-  const { student } = useSession();
-  if (!student) {
-    return (
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    );
-  }
   return (
     <Routes>
-      <Route element={<Layout key={student.id} />}>
+      <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="learning" element={<MyLearningPage />} />
         <Route path="learning/:sid" element={<SubjectPage />} />

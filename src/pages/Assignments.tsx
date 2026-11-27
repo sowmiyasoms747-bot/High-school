@@ -76,7 +76,7 @@ export function AssignmentPage() {
           <h2>Your work</h2>
           <textarea rows={6} value={text} onChange={(e) => { setText(e.target.value); setError(''); }} placeholder="Type your answer here" aria-label="Your answer" />
           <label className="upload"><Upload size={24} /><span>{file ?? 'Attach a file (PDF, image or document)'}</span><input type="file" accept=".pdf,.doc,.docx,image/*" onChange={(e) => { setFile(e.target.files?.[0]?.name); setError(''); }} /></label>
-          {error && <p className="login-error" role="alert">{error}</p>}
+          {error && <p className="form-error" role="alert">{error}</p>}
           <button className="btn">Submit Assignment</button>
         </form>
       )}

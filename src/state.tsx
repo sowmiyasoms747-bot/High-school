@@ -29,7 +29,6 @@ export type ChapterStatus = 'completed' | 'current' | 'new';
 export const PASS_MARK = 80;
 export const REWARD = 100;
 const EMPTY: ChapterProgress = { theory: [], video: 0, practice: [], test: null };
-const SESSION = 'lu-hs-session';
 const dataKey = (id: string) => `lu-hs-data-${id}`;
 const chapKey = (s: SubjectId, n: number) => `${s}-${n}`;
 
@@ -50,11 +49,9 @@ function initial(st: Student): Saved {
 const avg = (a: number[]) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0);
 
 function useStore() {
-  const [student, setStudent] = useState<Student | null>(() => {
-    const id = read<string>(localStorage, SESSION) ?? read<string>(sessionStorage, SESSION);
-    return STUDENTS.find((s) => s.id === id) ?? null;
-  });
-  const [data, setData] = useState<Saved | null>(() => (student ? initial(student) : null));
+  // No login: the app always opens as the demo student.
+  const student: Student = STUDENTS[0];
+  const [data, setData] = useState<Saved | null>(() => initial(student));
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
@@ -66,29 +63,6 @@ function useStore() {
     const t = setTimeout(() => setToast(null), 3200);
     return () => clearTimeout(t);
   }, [toast]);
-
-  const login = useCallback((idOrEmail: string, password: string) => {
-    const key = idOrEmail.trim().toLowerCase();
-    const st = STUDENTS.find((s) => (s.id.toLowerCase() === key || s.email === key) && s.password === password);
-    if (!st) return false;
-    localStorage.setItem(SESSION, JSON.stringify(st.id));
-    setStudent(st);
-    setData(initial(st));
-    return true;
-  }, []);
-
-  const logout = useCallback(() => {
-    localStorage.removeItem(SESSION);
-    sessionStorage.removeItem(SESSION);
-    setStudent(null);
-    setData(null);
-  }, []);
-
-  const keepSignedIn = useCallback((on: boolean) => {
-    if (!student) return;
-    (on ? sessionStorage : localStorage).removeItem(SESSION);
-    (on ? localStorage : sessionStorage).setItem(SESSION, JSON.stringify(student.id));
-  }, [student]);
 
   const patch = useCallback((fn: (d: Saved) => Partial<Saved>) => setData((d) => (d ? { ...d, ...fn(d) } : d)), []);
 
@@ -196,7 +170,7 @@ function useStore() {
     };
   }, [student, data, patch]);
 
-  return { student, api, login, logout, keepSignedIn, toast, setToast };
+  return { student, api, toast, setToast };
 }
 
 type Store = ReturnType<typeof useStore>;

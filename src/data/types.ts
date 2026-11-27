@@ -79,7 +79,6 @@ export interface Seed {
 export interface Student {
   id: string;
   email: string;
-  password: string;
   name: string;
   cls: ClassNo;
   section: string;

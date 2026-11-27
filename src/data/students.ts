@@ -1,9 +1,9 @@
 import type { ClassNo, Seed, Student, SubjectId, TestResult } from './types';
 
-/** Demo accounts only – replace with your login API. */
+/** Demo students. The app opens as the first one (there is no login). */
 export const STUDENTS: Student[] = [
-  { id: 'LU10-045', email: 'kavin@learninguniverse.demo', password: 'student123', name: 'Kavin R.', cls: 10, section: 'A', avatar: 'kavin', rollNo: '45', guardian: 'Ramesh K.', phone: '90000 00045' },
-  { id: 'LU09-032', email: 'meera@learninguniverse.demo', password: 'student123', name: 'Meera S.', cls: 9, section: 'B', avatar: 'meera', rollNo: '32', guardian: 'Suresh M.', phone: '90000 00032' },
+  { id: 'LU10-045', email: 'kavin@learninguniverse.demo', name: 'Kavin R.', cls: 10, section: 'A', avatar: 'kavin', rollNo: '45', guardian: 'Ramesh K.', phone: '90000 00045' },
+  { id: 'LU09-032', email: 'meera@learninguniverse.demo', name: 'Meera S.', cls: 9, section: 'B', avatar: 'meera', rollNo: '32', guardian: 'Suresh M.', phone: '90000 00032' },
 ];
 
 const done = (s: SubjectId, from: number, to: number) =>
