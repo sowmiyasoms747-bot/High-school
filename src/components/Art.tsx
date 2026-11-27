@@ -12,8 +12,6 @@ export function ArtDefs() {
   return (
     <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
       <defs>
-        {g('g-gold2', '#ffd04d', '#d98a0b')}
-        {g('g-navy', '#3d5597', '#172a63')}
         {g('g-page', '#ffffff', '#dfe3f3')}
         {g('b-blue', '#3f9bff', '#0a3fd0')}{g('b-green', '#34c45c', '#067a34')}{g('b-indigo', '#6f66ff', '#2412a8')}{g('b-teal', '#22c7c0', '#04757f')}{g('b-pink', '#ff4f97', '#a30d74')}
         <linearGradient id="b-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fffbc0" /><stop offset=".45" stopColor="#ffe02e" /><stop offset="1" stopColor="#ffa800" /></linearGradient>
@@ -38,19 +36,6 @@ export function Logo({ big }: { big?: boolean }) {
 export const Flame = ({ size = 24 }: { size?: number }) => <Icon name="flame" size={size} />;
 export const StarArt = ({ size = 24 }: { size?: number }) => <Icon name="star" size={size} />;
 export const SubjectIcon = ({ id, size = 84 }: { id: SubjectId; size?: number }) => <Icon name={id} size={size} />;
-
-export function CapBooks() {
-  return (
-    <svg viewBox="0 0 520 330" className="cap-books" aria-hidden="true">
-      <ellipse cx="280" cy="304" rx="230" ry="20" fill="#3f5fc9" opacity=".25" />
-      <path d="M36 226 262 178l226 34v66L270 330 36 286z" fill="#1f7fd0" /><path d="M48 240 270 290v34L48 276z" fill="url(#g-page)" /><path d="M270 290 488 236v34L270 324z" fill="#f3f5fd" /><path d="M36 222 262 176l230 34-222 56z" fill="#2a95e6" />
-      <path d="M36 222c-10 10-10 50 0 64l12-2c-8-14-8-36 0-50z" fill="#1768b4" /><path d="m50 252 220 48 216-50M50 264l220 48 216-50" fill="none" stroke="#c3cae2" strokeWidth="1.6" />
-      <path d="M74 158 258 118l186 34v54L262 252 74 216z" fill="#7f45cf" /><path d="M86 172 264 214v32L86 206z" fill="url(#g-page)" /><path d="M264 214 440 170v30L264 246z" fill="#f3f5fd" /><path d="M74 156 258 116l190 32-184 48z" fill="#a673ea" /><path d="M74 156c-10 10-10 46 0 60l11-2c-7-14-7-32 0-46z" fill="#6531b2" /><path d="m88 184 176 40 174-42M88 194l176 40 174-42" fill="none" stroke="#c3cae2" strokeWidth="1.6" />
-      <path d="M180 74v62c20 30 140 30 164 0V74z" fill="url(#g-navy)" /><path d="m104 60 160-54 168 50-164 62z" fill="#32498c" /><path d="m104 60 164 58 164-62v8L268 128 104 68z" fill="#1a2a5e" /><path d="m120 59 144-49 60 18-150 52z" fill="#fff" opacity=".08" />
-      <ellipse cx="266" cy="58" rx="13" ry="7" fill="#1a2a5e" /><path d="M266 56c50 4 100 10 116 22v34" fill="none" stroke="#f5b025" strokeWidth="6" strokeLinecap="round" /><path d="M376 110h13l5 46h-23z" fill="url(#g-gold2)" /><circle cx="382" cy="110" r="8" fill="#ffcf57" />
-    </svg>
-  );
-}
 
 export function StackedBooks() {
   return (

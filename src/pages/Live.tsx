@@ -16,7 +16,7 @@ export function LivePage() {
   const { setToast } = useSession();
   const [tab, setTab] = useState(0);
   const [now, ...next] = app.seed.live;
-  const lessons = app.subjects.flatMap((s) => s.chapters.map((t, i) => ({ s, n: i + 1, t, l: app.lesson(s.id, i + 1) }))).filter((c) => c.l && app.status(c.s.id, c.n) !== 'locked');
+  const lessons = app.subjects.flatMap((s) => s.chapters.map((t, i) => ({ s, n: i + 1, t, l: app.lesson(s.id, i + 1) }))).filter((c) => c.l);
   return (
     <>
       <h1>Live Classes</h1>

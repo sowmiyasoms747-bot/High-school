@@ -1,11 +1,11 @@
-import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, Circle, Download, FlaskConical, Globe, Languages, LockKeyhole, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, Circle, Download, FlaskConical, Globe, Languages, type LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Compass, Mesh, SubjectIcon } from '../components/Art';
 import { Icon, type IconName } from '../components/Icon';
 import { Bar, Crumbs, Empty, NotPublished, Ring, Tabs, downloadText } from '../components/ui';
 import type { Lesson, SubjectId } from '../data/types';
-import { REWARD, PASS_MARK, useApp, useSession } from '../state';
+import { REWARD, PASS_MARK, useApp } from '../state';
 
 const plain = (s: string) => s.replace(/[$"]/g, '').replace(/_(\w)/g, '$1').replace(/\^2/g, '²').replace(/\^3/g, '³').replace(/\^(\w)/g, '^$1');
 export function downloadNotes(title: string, l: Lesson) {
@@ -45,15 +45,13 @@ const ART: Record<Exclude<SubjectId, 'maths'>, LucideIcon> = { science: FlaskCon
 
 export function SubjectPage() {
   const app = useApp();
-  const { setToast } = useSession();
   const go = useNavigate();
   const sub = app.subject(useParams().sid ?? '');
   const [tab, setTab] = useState(0);
   if (!sub) return <Navigate to="/learning" replace />;
   const Art = sub.id === 'maths' ? null : ART[sub.id];
-  const cur = app.currentChapter(sub.id);
   const base = `/learning/${sub.id}`;
-  const open = sub.chapters.map((title, i) => ({ title, n: i + 1, l: app.lesson(sub.id, i + 1) })).filter((c) => app.status(sub.id, c.n) !== 'locked');
+  const open = sub.chapters.map((title, i) => ({ title, n: i + 1, l: app.lesson(sub.id, i + 1) }));
   const withLesson = open.filter((c) => c.l);
 
   return (
@@ -71,14 +69,12 @@ export function SubjectPage() {
           {sub.chapters.map((title, i) => {
             const n = i + 1;
             const st = app.status(sub.id, n);
-            const open = () => (st === 'locked' ? setToast(`Finish Chapter ${cur} to unlock this chapter.`) : go(`${base}/${n}`));
             return (
-              <button key={title} className="row" onClick={open}>
-                {st === 'completed' ? <span className="tick"><Check size={20} strokeWidth={3.4} /></span> : st === 'current' ? <Circle size={34} className="ring-ico" /> : <LockKeyhole size={32} className="lock-ico" />}
+              <button key={title} className="row" onClick={() => go(st === 'current' ? app.resume(sub.id, n) : `${base}/${n}`)}>
+                {st === 'completed' ? <span className="tick"><Check size={20} strokeWidth={3.4} /></span> : <Circle size={34} className="ring-ico" />}
                 <span className="row-t"><b>Chapter {n}: {title}</b></span>
                 {st === 'completed' && <span className="pill green">Completed</span>}
                 {st === 'current' && <span className="btn">Continue <ArrowRight size={20} /></span>}
-                {st === 'locked' && <span className="pill grey">Locked</span>}
                 {st !== 'current' && <ChevronRight size={24} />}
               </button>
             );
@@ -134,7 +130,7 @@ export function useChapter() {
   const sub = app.subject(sid ?? '');
   const n = Number(raw);
   const title = sub?.chapters[n - 1];
-  if (!sub || !title || app.status(sub.id, n) === 'locked') return null;
+  if (!sub || !title) return null;
   return { app, sub, n, title, lesson: app.lesson(sub.id, n), base: `/learning/${sub.id}/${n}` };
 }
 

@@ -18,9 +18,14 @@ interface Saved {
   profile: { phone: string; guardian: string };
   prefs: Record<string, boolean>;
   chat: ChatMessage[];
+  /** Last page visited inside each chapter, so Continue resumes there. */
+  last: Record<string, string>;
+  /** Notification ids the student has already seen. */
+  seen: string[];
 }
 
-export type ChapterStatus = 'completed' | 'current' | 'locked';
+/** new: never opened · current: started, not finished · completed: finished. */
+export type ChapterStatus = 'completed' | 'current' | 'new';
 export const PASS_MARK = 80;
 export const REWARD = 100;
 const EMPTY: ChapterProgress = { theory: [], video: 0, practice: [], test: null };
@@ -37,7 +42,7 @@ function initial(st: Student): Saved {
   const base: Saved = {
     completed: seed.completed, chapters: seed.chapters, tests: seed.tests, points: seed.points,
     submissions: {}, reminders: [], notes: {}, profile: { phone: st.phone, guardian: st.guardian },
-    prefs: { classReminders: true, dueAlerts: true, testResults: true, weeklyReport: false }, chat: [],
+    prefs: { classReminders: true, dueAlerts: true, testResults: true, weeklyReport: false }, chat: [], last: {}, seen: [],
   };
   return { ...base, ...(read<Partial<Saved>>(localStorage, dataKey(st.id)) ?? {}) };
 }
@@ -112,14 +117,19 @@ function useStore() {
       const st = stages(s, n);
       return Math.floor(((st.theory + st.video + st.practice + st.test) / 4) * 100 + 1e-6);
     };
-    /** A chapter opens once every earlier chapter is complete. */
-    const status = (s: SubjectId, n: number): ChapterStatus => {
-      if (isDone(s, n)) return 'completed';
-      for (let i = 1; i < n; i++) if (!isDone(s, i)) return 'locked';
-      return 'current';
+    /** Every chapter is open. It counts as started once visited or once any work is saved. */
+    const isStarted = (s: SubjectId, n: number) => {
+      const p = raw(s, n);
+      return !!data.last[chapKey(s, n)] || p.theory.length > 0 || p.video > 0 || p.practice.length > 0 || p.test !== null;
     };
+    const status = (s: SubjectId, n: number): ChapterStatus => (isDone(s, n) ? 'completed' : isStarted(s, n) ? 'current' : 'new');
+    /** Where Continue should take the student: the last page they were on, else the chapter page. */
+    const resume = (s: SubjectId, n: number) => data.last[chapKey(s, n)] ?? `/learning/${s}/${n}`;
     const currentChapter = (s: SubjectId) => {
-      const i = subject(s)!.chapters.findIndex((_, k) => !isDone(s, k + 1));
+      const chs = subject(s)!.chapters;
+      const started = chs.findIndex((_, k) => status(s, k + 1) === 'current');
+      if (started >= 0) return started + 1;
+      const i = chs.findIndex((_, k) => !isDone(s, k + 1));
       return i < 0 ? null : i + 1;
     };
     const subjectPct = (s: SubjectId) => {
@@ -147,7 +157,7 @@ function useStore() {
       a.graded ? 'graded' : data.submissions[a.id] ? 'submitted' : 'todo';
 
     return {
-      student, data, seed, subjects, subject, lesson, raw, stages, chapterPct, status, currentChapter, subjectPct, subjectScore,
+      student, data, seed, subjects, subject, lesson, raw, stages, chapterPct, status, resume, currentChapter, subjectPct, subjectScore,
       overallPct: Math.round(avg(subjects.map((s) => subjectPct(s.id)))),
       overallScore: Math.round(avg(data.tests.map((t) => t.score))),
       assignmentState,
@@ -171,6 +181,11 @@ function useStore() {
         patch((d) => ({ submissions: { ...d.submissions, [id]: { text, file, at: new Date().toISOString() } } })),
       toggleReminder: (id: string) =>
         patch((d) => ({ reminders: d.reminders.includes(id) ? d.reminders.filter((x) => x !== id) : [...d.reminders, id] })),
+      /** Remembers the page the student is on inside a chapter. */
+      visitChapter: (s: SubjectId, n: number, path: string) => {
+        if (data.last[chapKey(s, n)] !== path) patch((d) => ({ last: { ...d.last, [chapKey(s, n)]: path } }));
+      },
+      markSeen: (ids: string[]) => patch((d) => ({ seen: [...new Set([...d.seen, ...ids])] })),
       saveNote: (s: SubjectId, n: number, text: string) => patch((d) => ({ notes: { ...d.notes, [chapKey(s, n)]: text } })),
       note: (s: SubjectId, n: number) => data.notes[chapKey(s, n)] ?? '',
       saveProfile: (profile: Saved['profile']) => patch(() => ({ profile })),

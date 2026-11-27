@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { CapBooks } from '../components/Art';
+import capBooks from '../assets/hero-cap-books.webp';
 import { Icon, type IconName } from '../components/Icon';
 import { GlossRing } from '../components/ui';
 import { longDate, shortDate, useApp } from '../state';
@@ -15,7 +15,7 @@ export function HomePage() {
   });
   const nextTest = app.status(scheduled.subject, scheduled.chapter) === 'completed' ? upcoming[0] : { ...scheduled, when: `${longDate(scheduled.day)} • ${scheduled.time}` };
   const n = app.currentChapter('maths');
-  const resume = n ? `/learning/maths/${n}` : '/learning';
+  const resume = n ? app.resume('maths', n) : '/learning';
   const todo = assignments.filter((a) => app.assignmentState(a) === 'todo');
   const actions: { to: string; label: [string, string]; icon: IconName }[] = [
     { to: resume, label: ['Continue', 'Learning'], icon: 'continueLearning' },
@@ -33,7 +33,7 @@ export function HomePage() {
           <p><span>Learn • Practice • Test</span> • Improve</p>
           <Link to={resume} className="btn">Start Learning <ArrowRight size={20} /></Link>
         </div>
-        <CapBooks />
+        <img src={capBooks} className="cap-books" alt="" />
       </section>
       <section className="panel">
         <h2>Quick Actions</h2>

@@ -6,6 +6,7 @@ import meera from '../assets/avatar-meera.webp';
 import { useApp, useSession } from '../state';
 import { Flame, Logo, StarArt } from './Art';
 import { MenuIcon, type MenuIconName } from './Icon';
+import { NotificationBell } from './Notifications';
 
 export const AVATARS = { kavin, meera };
 
@@ -45,7 +46,7 @@ function SearchBox({ expanded, onClose }: { expanded: boolean; onClose: () => vo
     ...NAV.map((n) => ({ label: n.label, sub: 'Page', to: n.to })),
     ...app.subjects.flatMap((s) => [
       { label: s.name, sub: 'Subject', to: `/learning/${s.id}` },
-      ...s.chapters.map((c, i) => ({ label: c, sub: `${s.name} – Chapter ${i + 1}`, to: app.status(s.id, i + 1) === 'locked' ? `/learning/${s.id}` : `/learning/${s.id}/${i + 1}` })),
+      ...s.chapters.map((c, i) => ({ label: c, sub: `${s.name} – Chapter ${i + 1}`, to: `/learning/${s.id}/${i + 1}` })),
     ]),
     ...app.seed.assignments.map((a) => ({ label: a.title, sub: 'Assignment', to: `/assignments/${a.id}` })),
   ], [app]);
@@ -86,6 +87,14 @@ export function Layout() {
   const [menu, setMenu] = useState(false);
   const [search, setSearch] = useState(false);
   useEffect(() => { setMenu(false); setSearch(false); window.scrollTo(0, 0); }, [pathname]);
+  // Remember where the student is inside a chapter so "Continue" can bring them back here.
+  useEffect(() => {
+    const m = pathname.match(/^\/(?:learning|quizzes)\/([^/]+)\/(\d+)(?:\/(?:theory|video|practice))?$/);
+    if (!m) return;
+    const sub = app.subject(m[1]);
+    const n = Number(m[2]);
+    if (sub?.chapters[n - 1]) app.visitChapter(sub.id, n, pathname);
+  }, [pathname, app]);
   // While the drawer is open: no page scroll behind it, Escape closes it, and it
   // closes if the screen is resized or rotated to a layout without a drawer.
   useEffect(() => {
@@ -112,6 +121,7 @@ export function Layout() {
         <div className="top-right">
           <Link to="/achievements" className="chip"><Flame size={28} /><span>{app.seed.streak} <em>Day Streak</em></span></Link>
           <Link to="/achievements" className="chip"><StarArt size={28} /><span>{app.data.points} <em>Points</em></span></Link>
+          <NotificationBell />
           <Link to="/profile" className="me">
             <img src={AVATARS[app.student.avatar]} alt="" />
             <span><b>{app.student.name}</b>Class {app.student.cls}</span>

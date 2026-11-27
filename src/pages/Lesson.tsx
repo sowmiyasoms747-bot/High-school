@@ -203,7 +203,7 @@ export function RewardPage() {
   const { app, sub, n, title, base } = ch;
   const done = app.status(sub.id, n) === 'completed';
   const st = app.stages(sub.id, n);
-  const next = sub.chapters[n] && app.status(sub.id, n + 1) !== 'locked' ? n + 1 : null;
+  const next = sub.chapters[n] ? n + 1 : null;
   const items = [['Read the theory', st.theory], ['Watch the video lesson', st.video], ['Solve all practice questions', st.practice], [`Score ${PASS_MARK}% or more in the test`, st.test]] as const;
   return (
     <>

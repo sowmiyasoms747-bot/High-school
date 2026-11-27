@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 560" width="520" height="560">
+  <defs>
+    <radialGradient id="sea" cx="38%" cy="32%" r="75%">
+      <stop offset="0" stop-color="#7fe0ff"/><stop offset=".45" stop-color="#1e9be8"/><stop offset="1" stop-color="#0b4fb0"/>
+    </radialGradient>
+    <linearGradient id="land" x1="0" y1="0" x2=".4" y2="1">
+      <stop offset="0" stop-color="#9df07a"/><stop offset=".55" stop-color="#3fbf3a"/><stop offset="1" stop-color="#1f8a2a"/>
+    </linearGradient>
+    <radialGradient id="shade" cx="35%" cy="30%" r="80%">
+      <stop offset=".55" stop-color="#062a6e" stop-opacity="0"/><stop offset="1" stop-color="#062a6e" stop-opacity=".55"/>
+    </radialGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe27a"/><stop offset=".45" stop-color="#ffb21e"/><stop offset="1" stop-color="#d97806"/>
+    </linearGradient>
+    <linearGradient id="goldV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd85a"/><stop offset=".5" stop-color="#f6a313"/><stop offset="1" stop-color="#c96a04"/>
+    </linearGradient>
+    <clipPath id="ball"><circle cx="250" cy="236" r="178"/></clipPath>
+    <filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="2.2"/></filter>
+  </defs>
+
+  <!-- stand -->
+  <path d="M232 448h36l10 46h-56z" fill="url(#goldV)"/>
+  <ellipse cx="250" cy="508" rx="118" ry="30" fill="#c96a04"/>
+  <ellipse cx="250" cy="498" rx="118" ry="30" fill="url(#gold)"/>
+  <ellipse cx="226" cy="490" rx="70" ry="11" fill="#fff" opacity=".45"/>
+
+  <!-- ocean sphere -->
+  <circle cx="250" cy="236" r="178" fill="url(#sea)"/>
+  <g clip-path="url(#ball)">
+    <!-- continents -->
+    <g fill="url(#land)" stroke="#1d7a27" stroke-width="3" stroke-linejoin="round">
+      <!-- North America -->
+      <path d="M78 120c30-38 92-62 140-52 26 6 34 26 20 42-12 14-36 12-44 30-8 18 8 34-6 50-14 16-40 6-52 22-10 14 2 36-12 44-18 10-38-14-46-40-10-34-24-58 0-96z"/>
+      <!-- South America -->
+      <path d="M176 262c22-6 46 6 56 26 10 20-2 40-10 60-8 22-6 48-24 62-12 10-24-4-26-22-2-20-8-38-14-58-6-22 0-62 18-68z"/>
+      <!-- Europe / Africa -->
+      <path d="M318 88c26-10 56-4 72 14 12 14-2 30 10 44 10 12 34 8 40 26 6 20-14 34-14 56 0 26 22 46 14 74-8 28-40 46-60 66-14 14-34 6-38-14-4-22 8-44 0-66-8-22-38-26-44-50-6-24 12-34 8-54-6-30-16-70 12-96z"/>
+      <!-- Asia edge -->
+      <path d="M402 90c30 6 62 30 74 62l10 60c-18 6-34-6-50-2-16 4-26-12-22-28 4-18-20-26-26-44-4-14 2-50 14-48z"/>
+      <!-- Australia -->
+      <path d="M392 318c18-8 40-2 48 14 6 14-8 26-24 28-18 2-38-4-38-18 0-10 6-20 14-24z"/>
+    </g>
+    <!-- 3D shading + rim light -->
+    <circle cx="250" cy="236" r="178" fill="url(#shade)"/>
+    <path d="M110 330c40 70 150 100 236 54" fill="none" stroke="#9fe8ff" stroke-width="8" stroke-linecap="round" opacity=".45" filter="url(#soft)"/>
+    <!-- glossy highlight -->
+    <ellipse cx="200" cy="140" rx="112" ry="70" fill="url(#gloss)" transform="rotate(-24 200 140)" opacity=".75"/>
+    <ellipse cx="160" cy="128" rx="26" ry="14" fill="#fff" transform="rotate(-30 160 128)" opacity=".9"/>
+  </g>
+  <circle cx="250" cy="236" r="178" fill="none" stroke="#0a3f93" stroke-width="3" opacity=".5"/>
+
+  <!-- meridian ring -->
+  <path d="M110 92A206 206 0 0 0 250 446" fill="none" stroke="#b86204" stroke-width="22" stroke-linecap="round" transform="translate(4 5)"/>
+  <path d="M110 92A206 206 0 0 0 250 446" fill="none" stroke="url(#gold)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M104 104A198 198 0 0 0 150 380" fill="none" stroke="#fff6c8" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+  <circle cx="250" cy="446" r="16" fill="url(#goldV)"/>
+</svg>
